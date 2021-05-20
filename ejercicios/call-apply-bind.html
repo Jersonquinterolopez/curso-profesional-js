@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>
+      Function.prototype.call, Function.prototype.apply, Function.prototype.bind
+    </title>
+  </head>
+
+  <body>
+    <a href="/ejercicios/">Go back</a>
+    <p><em>Abre la consola</em></p>
+
+    <ul>
+      <li><button class="call-to-action">Aprender</button></li>
+      <li><button class="call-to-action">Aprender Más</button></li>
+      <li><button class="call-to-action">¡Nunca parar de Aprender!</button></li>
+    </ul>
+
+    <script>
+      // Establece `this` usando `call`
+      function saludar() {
+        console.log(`Hola. soy ${this.name} ${this.apellido} `);
+      }
+
+      const richard = {
+        name: 'richard',
+        apellido: 'lopez',
+      };
+
+      // con call le estamos diciendo que el this es el objeto richard
+      saludar.call(richard);
+
+      // Establece `this` usando `call` y pasar argumentos a la función
+      function caminar(metros, direccion) {
+        console.log(`${this.name} camina ${metros} hacia el ${direccion}.`);
+      }
+
+      caminar.call(richard, 400, 'norte');
+      // en este ejemplo `this` sigue siendo richard pero le agregamos dos argumentos que si o si debemos pasarselos en la declaracion con `call`
+
+      // si no se los pasamos nos va a dar undefined por cada valor: `richard camina undefined hacia el undefined.`
+
+      // Establece `this` usando `apply` y pasar argumentos a la función
+      caminar.apply(richard, [800, 'sur']);
+      // `apply` funciona casi igual que `call`, la diferencia es que los argumentos se los pasamos atravez de un array, hay momentos en donde es mas conveniente usarlo, por ejemplo cuando tenemos un array muy largo.
+
+      // tambien podemos guardar declarar el array si esta contenido en una variable como en este ejemplo:
+      const VALORES = [800, 'noroeste'];
+      caminar.apply(richard, VALORES);
+
+      // puede pasar que te confundas cuando lo estes usando ya que sun funcionamiento es muy similar, asi que es es un muy buen ejemplo para recordar y siempre diferenciarlos:
+
+      /* 
+      `Call` - comma // los argumentos se pasan por coma
+      `Apply` - array // los argumentos pasan por un array
+      */
+
+      // Establecer `this` en una nueva función usando `bind`
+      const daniel = { name: 'Daniel', apellido: 'Sanchez' };
+      const danielSaluda = saludar.bind(daniel);
+
+      danielSaluda();
+
+      // `bind`con argumentos:
+      const danielCamina = caminar.bind(daniel, 1000, 'este');
+
+      danielCamina();
+
+      // Cuándo es útil usar uno de estos métodos
+      const buttons = document.getElementsByClassName('call-to-action');
+      // buttons.forEach((button) => {
+      //   button.onclick = () => alert('Nunca pares de aprender!');
+      // });
+
+      // NodeList
+      Array.prototype.forEach.call(buttons, (button) => {
+        button.onclick = () => alert('Nunca pares de aprender!');
+      });
+    </script>
+  </body>
+</html>
